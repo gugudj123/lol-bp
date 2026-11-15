@@ -226,4 +226,14 @@ if __name__ == '__main__':
     print("3. 如果想在同一个电脑测试，开两个无痕窗口分别粘贴上面的地址。")
     print("4. 如果想在局域网测试，把 127.0.0.1 换成本机的局域网 IP（如 192.168.x.x）")
     print("="*50)
-    socketio.run(app, host='0.0.0.0', port=5000, debug=False)
+    # 原来的 socketio.run 不要用了
+# if __name__ == '__main__':
+#     socketio.run(app, host='0.0.0.0', port=5000, debug=False)
+
+# 新增以下代码
+from gevent import pywsgi
+from geventwebsocket.handler import WebSocketHandler
+
+if __name__ == '__main__':
+    server = pywsgi.WSGIServer(('0.0.0.0', 5000), app, handler_class=WebSocketHandler)
+    server.serve_forever()
